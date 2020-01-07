@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dog-api
+  labels:
+    app: dogapi
+spec:
+  replicas: 2
+  strategy:
+# Note RollingUpdate    
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: dogapi
+  template:
+    metadata:
+      labels:
+        app: dogapi
+    spec:
+      containers:
+        - name: dogapi
+          image: thornpar/dogapi:version2
+          env:
+            - name: "ASPNETCORE_ENVIRONMENT"
+              value: "Development"
+          ports:
+            - containerPort: 80
+#NOTE readyness probe
+          readinessProbe:
+            httpGet:
+              path: /api/dogs
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          
+        
+#while(true); do sleep 0.1; echo $(curl -s http://demo.rpcode.se/api/dogs)|cat; done;
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dog-api-service
+  labels:
+    app: dogapi
+spec:
+  selector:
+    app: dogapi
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  #type: LoadBalancer
+  type: ClusterIP
+  
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dog-api
+  labels:
+    app: dogapi
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: demo.rpcode.se
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: dog-api-service
+              servicePort: 80
+
+
+              
+              
