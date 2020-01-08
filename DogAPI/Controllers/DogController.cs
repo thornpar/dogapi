@@ -13,9 +13,9 @@ namespace DogAPI.Controllers
     [Route("api")]
     public class DogController : ControllerBase
     {
-        private readonly DogDatabase _dogDatabase;
+        private readonly DogContext _dogDatabase;
 
-        public DogController(DogDatabase dogDatabase)
+        public DogController(DogContext dogDatabase)
         {
             _dogDatabase = dogDatabase;
         }
@@ -28,13 +28,7 @@ namespace DogAPI.Controllers
         [Route("dogs")]
         public ActionResult<IEnumerable<object>> Get()
         {
-            return Ok(_dogDatabase.Dogs.Select(e =>
-                new
-                {
-                    Name = e.Name,
-                    Race = e.Race,
-                    //BestSkill = e.BestSkill
-                }));
+            return Ok(_dogDatabase.Dogs);
         }
     }
 }
