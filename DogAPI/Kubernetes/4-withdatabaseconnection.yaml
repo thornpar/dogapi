@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: dogapi
-          image: thornpar/dogapi:version2
+          image: thornpar/dogapi:version3
           envFrom:
             - configMapRef:
                 name: dog-config
@@ -84,6 +84,6 @@ metadata:
   name: dog-config
 data:
   ASPNETCORE_ENVIRONMENT: "Development"
-  CONNECTION_STRING: "Server=default.postgres-postgresql;Database=dogdatabase;User ID=postgres;Password=postgres;Host=default.postgres-postgresql"
+  CONNECTION_STRING: "Server=default.postgres-postgresql;Port=5432;Database=dogdatabase;User ID=postgres;Password=postgres;Host=postgres-postgresql"
   
   

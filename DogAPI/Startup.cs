@@ -62,7 +62,7 @@ namespace DogAPI
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-            
+            Console.WriteLine("Connectionstring is : "+Environment.GetEnvironmentVariable("CONNECTION_STRING"));
             using (var db = new DogContext(contextOptions))
             {
                 db.Database.Migrate();

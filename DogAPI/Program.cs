@@ -21,7 +21,7 @@ namespace DogAPI
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel(options =>
                 {
-                    options.ListenAnyIP(5000);
+                    options.ListenAnyIP(80);
                 })
                 .UseStartup<Startup>();
     }
