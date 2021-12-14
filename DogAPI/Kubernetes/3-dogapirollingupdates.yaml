@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: dogapi
-          image: thornpar/dogapi:version2
+          image: thornpar/dogapi:version1
           env:
             - name: "ASPNETCORE_ENVIRONMENT"
               value: "Development"
@@ -58,23 +58,23 @@ spec:
   
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dog-api
-  labels:
-    app: dogapi
-  annotations:
-    kubernetes.io/ingress.class: nginx
+  name: dog-api-ingress
 spec:
   rules:
     - host: demo.rpcode.se
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: dog-api-service
-              servicePort: 80
+              service:
+                name: dog-api-service
+                port:
+                  number: 80
+  ingressClassName: nginx
 
 
               
